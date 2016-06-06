@@ -949,7 +949,11 @@ static void usb_stor_set_max_xfer_blk(struct usb_device *udev,
 	 * there is enough free heap space left, but the SCSI READ(10) and
 	 * WRITE(10) commands are limited to 65535 blocks.
 	 */
-	blk = USHRT_MAX;
+	/*
+	 * Some USB mass storage devices have issues, limiting this to 256
+	 * fixes this.
+	 */
+	blk = 256;
 #else
 	blk = 20;
 #endif
