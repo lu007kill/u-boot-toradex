@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <thermal.h>
 #include <asm/arch/sci/sci.h>
+#include <asm/arch/sid.h>
 #include <asm/arch/sys_proto.h>
 #include <asm/arch-imx/cpu.h>
 #include <asm/armv8/cpu.h>
@@ -511,6 +512,46 @@ void imx_get_mac_from_fuse(int dev_id, unsigned char *mac)
 	return;
 err:
 	printf("%s: fuse %d, err: %d\n", __func__, word[i], ret);
+}
+
+#ifdef CONFIG_IMX_SMMU
+struct smmu_sid dev_sids[] = {
+	{ SC_R_SDHC_0, 0x11, "SDHC0" },
+	{ SC_R_SDHC_1, 0x11, "SDHC1" },
+	{ SC_R_SDHC_2, 0x11, "SDHC2" },
+	{ SC_R_ENET_0, 0x12, "FEC0" },
+	{ SC_R_ENET_1, 0x12, "FEC1" },
+};
+
+sc_err_t imx8_config_smmu_sid(struct smmu_sid *dev_sids, int size)
+{
+	int i;
+	sc_err_t sciErr = SC_ERR_NONE;
+
+	if ((dev_sids == NULL) || (size <= 0))
+		return SC_ERR_NONE;
+
+	for (i = 0; i < size; i++) {
+		sciErr = sc_rm_set_master_sid(-1,
+					      dev_sids[i].rsrc,
+					      dev_sids[i].sid);
+		if (sciErr != SC_ERR_NONE) {
+			printf("set master sid error\n");
+			return sciErr;
+		}
+	}
+
+	return SC_ERR_NONE;
+}
+#endif
+
+void arch_preboot_os(void)
+{
+#ifdef CONFIG_IMX_SMMU
+	sc_pm_set_resource_power_mode(-1, SC_R_SMMU, SC_PM_PW_MODE_ON);
+
+	imx8_config_smmu_sid(dev_sids, ARRAY_SIZE(dev_sids));
+#endif
 }
 
 u32 get_cpu_rev(void)
