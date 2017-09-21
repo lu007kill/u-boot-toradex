@@ -64,6 +64,7 @@
 #define CONFIG_USBD_HS
 
 /* Framebuffer and LCD */
+#if !defined(CONFIG_SPL_BUILD)
 #define CONFIG_SYS_CONSOLE_OVERWRITE_ROUTINE
 #define CONFIG_VIDEO_BMP_RLE8
 #define CONFIG_SPLASH_SCREEN
@@ -74,6 +75,7 @@
 #define CONFIG_CONSOLE_MUX
 #define CONFIG_IMX_HDMI
 #define CONFIG_IMX_VIDEO_SKIP
+#endif
 
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
