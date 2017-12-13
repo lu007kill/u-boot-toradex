@@ -65,3 +65,6 @@ obj-$(CONFIG_VIDEO_VESA) += vesa.o
 
 obj-y += bridge/
 obj-y += sunxi/
+
+UBOOTINCLUDE += -I$(srctree)/drivers/video/imx/hdp
+obj-$(CONFIG_VIDEO_IMX_HDP_LOAD) += imx/hdp_load.o imx/hdp/
