@@ -61,9 +61,12 @@
 	"fdt_file=fsl-imx8qm-apalis-eval.dtb\0" \
 	"fdtfile=fsl-imx8qm-apalis-eval.dtb\0" \
 	"finduuid=part uuid mmc ${mmcdev}:2 uuid\0" \
+	"hdp_addr=0x84000000\0" \
+	"hdp_file=hdmitxfw.bin\0" \
 	"image=Image\0" \
 	"initrd_addr=0x83800000\0" \
 	"initrd_high=0xffffffffffffffff\0" \
+	"loadhdp=fatload mmc ${mmcdev}:${mmcpart} ${hdp_addr} ${hdp_file}\0" \
 	"mmcargs=setenv bootargs console=${console},${baudrate} " \
 		"root=PARTUUID=${uuid} rootwait " \
 	"mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV) "\0" \
@@ -71,8 +74,10 @@
 	"netargs=setenv bootargs console=${console},${baudrate} " \
 		"root=/dev/nfs ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp" \
 		"\0" \
-	"nfsboot=run netargs; dhcp ${loadaddr} ${image}; tftp ${fdt_addr} " \
-		"apalis-imx8/${fdt_file}; booti ${loadaddr} - ${fdt_addr}\0" \
+	"nfsboot=run netargs; dhcp ${loadaddr} ${image}; if tftp ${hdp_addr} " \
+		"${hdp_file}; then; hdp load ${hdp_addr}; fi; tftp " \
+		"${fdt_addr} apalis-imx8/${fdt_file}; booti ${loadaddr} - " \
+		"${fdt_addr}\0" \
 	"panel=NULL\0" \
 	"script=boot.scr\0" \
 	"update_uboot=askenv confirm Did you load u-boot-dtb.imx (y/N)?; " \
@@ -80,6 +85,10 @@
 		"setexpr blkcnt ${filesize} + 0x1ff && setexpr blkcnt " \
 		"${blkcnt} / 0x200; mmc dev 0 1; mmc write ${loadaddr} 0x0 " \
 		"${blkcnt}; fi\0"
+
+#undef CONFIG_BOOTCOMMAND
+#define CONFIG_BOOTCOMMAND \
+	"if run loadhdp; then; hdp load ${hdp_addr}; fi; run distro_bootcmd"
 
 /* Link Definitions */
 #define CONFIG_LOADADDR			0x80280000
