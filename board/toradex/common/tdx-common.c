@@ -68,6 +68,7 @@ void get_board_serial(struct tag_serialnr *serialnr)
 int show_board_info(void)
 {
 	unsigned char ethaddr[6];
+	char* tdx_module_name;
 
 	if (read_tdx_cfg_block()) {
 		printf("MISSING TORADEX CONFIG BLOCK\n");
@@ -75,6 +76,13 @@ int show_board_info(void)
 		tdx_eth_addr.nic = htonl(tdx_serial << 8);
 		checkboard();
 	} else {
+		if (is_tdx_prototype_prodid(tdx_hw_tag.prodid)) {
+			tdx_module_name = (char *)
+				toradex_prototype_modules[tdx_hw_tag.prodid - 2600];
+		} else {
+			tdx_module_name = (char *)
+				toradex_modules[tdx_hw_tag.prodid];
+		}
 		sprintf(tdx_serial_str, "%08u", tdx_serial);
 		sprintf(tdx_board_rev_str, "V%1d.%1d%c",
 			tdx_hw_tag.ver_major,
@@ -84,7 +92,7 @@ int show_board_info(void)
 		env_set("serial#", tdx_serial_str);
 
 		printf("Model: Toradex %s %s, Serial# %s\n",
-		       toradex_modules[tdx_hw_tag.prodid],
+		       tdx_module_name,
 		       tdx_board_rev_str,
 		       tdx_serial_str);
 	}

@@ -8,6 +8,7 @@
 
 #if defined(CONFIG_TARGET_APALIS_IMX6) || \
 	defined(CONFIG_TARGET_APALIS_IMX8) || \
+	defined(CONFIG_TARGET_APALIS_IMX8QXP) || \
 	defined(CONFIG_TARGET_COLIBRI_IMX6) || \
 	defined(CONFIG_TARGET_COLIBRI_IMX8QXP)
 #include <asm/arch/sys_proto.h>
@@ -111,6 +112,12 @@ const char * const toradex_modules[] = {
 	[50] = "Colibri iMX8 QuadXPlus 2GB IT",
 	[51] = "Colibri iMX8 DualX 1GB Wi-Fi / Bluetooth",
 	[52] = "Colibri iMX8 DualX 1GB",
+	[53] = "Apalis iMX8 QuadXPlus 2GB ECC IT",
+	[54] = "Apalis iMX8 DualXPlus 1GB",
+};
+
+const char * const toradex_prototype_modules[] = {
+	[0] = "Apalis iMX8QXP 2GB ECC Wi / BT IT PROTO"
 };
 
 #ifdef CONFIG_TDX_CFG_BLOCK_IS_IN_MMC
@@ -213,6 +220,16 @@ static int write_tdx_cfg_block_to_nor(unsigned char *config_block)
 }
 #endif
 
+int is_tdx_prototype_prodid(u16 prodid)
+{
+	int prototype_range_min = 2600;
+	int prototype_range_max = 2600 + (sizeof(toradex_prototype_modules) /
+					  sizeof(toradex_prototype_modules[0]));
+
+	return ((prodid >= prototype_range_min) &&
+		(prodid < prototype_range_max));
+}
+
 int read_tdx_cfg_block(void)
 {
 	int ret = 0;
@@ -279,8 +296,10 @@ int read_tdx_cfg_block(void)
 
 	/* Cap product id to avoid issues with a yet unknown one */
 	if (tdx_hw_tag.prodid >= (sizeof(toradex_modules) /
-				  sizeof(toradex_modules[0])))
-		tdx_hw_tag.prodid = 0;
+				  sizeof(toradex_modules[0]))) {
+		if (!is_tdx_prototype_prodid(tdx_hw_tag.prodid))
+			tdx_hw_tag.prodid = 0;
+	}
 
 out:
 	free(config_block);

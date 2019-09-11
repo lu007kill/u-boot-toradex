@@ -73,14 +73,21 @@ enum {
 	COLIBRI_IMX8QXP_IT, /* 50 */
 	COLIBRI_IMX8DX_WIFI_BT,
 	COLIBRI_IMX8DX,
+	APALIS_IMX8QXP_ECC_IT,
+	APALIS_IMX8DXP,
+	/* Prototypes */
+	APALIS_IMX8QXP_ECC_WIFI_BT_IT_PROTOTYPE = 2600,
 };
 
 extern const char * const toradex_modules[];
+extern const char * const toradex_prototype_modules[];
 extern bool valid_cfgblock;
 extern struct toradex_hw tdx_hw_tag;
 extern struct toradex_eth_addr tdx_eth_addr;
 extern u32 tdx_serial;
 
 int read_tdx_cfg_block(void);
+
+int is_tdx_prototype_prodid(u16 prodid);
 
 #endif /* _TDX_CFG_BLOCK_H */
