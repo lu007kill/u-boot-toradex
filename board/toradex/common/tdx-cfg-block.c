@@ -312,6 +312,8 @@ static int get_cfgblock_interactive(void)
 	char *soc;
 	char it = 'n';
 	char wb = 'n';
+	char ac = 'A';
+	char ecc = 'n';
 	int len;
 
 	/* Unknown module by default */
@@ -325,12 +327,26 @@ static int get_cfgblock_interactive(void)
 	it = console_buffer[0];
 
 #if defined(CONFIG_TARGET_APALIS_IMX8) || \
+		defined(CONFIG_TARGET_APALIS_IMX8QXP) || \
 		defined(CONFIG_TARGET_COLIBRI_IMX6ULL) || \
 		defined(CONFIG_TARGET_COLIBRI_IMX8X)
 	sprintf(message, "Does the module have Wi-Fi / Bluetooth? " \
 			 "[y/N] ");
 	len = cli_readline(message);
 	wb = console_buffer[0];
+#endif
+
+#if defined(CONFIG_TARGET_APALIS_IMX8QXP) || \
+		defined(CONFIG_TARGET_COLIBRI_IMX8X)
+	sprintf(message, "Is the module family type Apalis (A) or Colibri (C)? " \
+			 "[A/C] ");
+	len = cli_readline(message);
+	ac = console_buffer[0];
+
+	sprintf(message, "Does the module have ECC ram installed? " \
+			 "[y/N] ");
+	len = cli_readline(message);
+	ecc = console_buffer[0];
 #endif
 
 	soc = env_get("soc");
@@ -389,16 +405,28 @@ static int get_cfgblock_interactive(void)
 				tdx_hw_tag.prodid = APALIS_IMX8QP;
 		}
 	} else if (is_cpu_type(MXC_CPU_IMX8QXP)) {
-		if (it == 'y' || it == 'Y') {
-			if (wb == 'y' || wb == 'Y')
-				tdx_hw_tag.prodid = COLIBRI_IMX8QXP_WIFI_BT_IT;
+		if (ac == 'c' || ac == 'C') {
+			if (it == 'y' || it == 'Y') {
+				if (wb == 'y' || wb == 'Y')
+					tdx_hw_tag.prodid = COLIBRI_IMX8QXP_WIFI_BT_IT;
+				else
+					tdx_hw_tag.prodid = COLIBRI_IMX8QXP_IT;
+			} else {
+				if (wb == 'y' || wb == 'Y')
+					tdx_hw_tag.prodid = COLIBRI_IMX8DX_WIFI_BT;
+				else
+					tdx_hw_tag.prodid = COLIBRI_IMX8DX;
+			}
+		} else if (wb == 'y' || wb == 'Y') {
+			if (ecc == 'y' || ecc == 'Y')
+				tdx_hw_tag.prodid = APALIS_IMX8QXP_ECC_WIFI_BT_IT_PROTOTYPE;
 			else
-				tdx_hw_tag.prodid = COLIBRI_IMX8QXP_IT;
+				tdx_hw_tag.prodid = APALIS_IMX8QXP_WIFI_BT_IT;
 		} else {
-			if (wb == 'y' || wb == 'Y')
-				tdx_hw_tag.prodid = COLIBRI_IMX8DX_WIFI_BT;
+			if (it == 'y' || it == 'Y')
+				tdx_hw_tag.prodid = APALIS_IMX8QXP_ECC_IT;
 			else
-				tdx_hw_tag.prodid = COLIBRI_IMX8DX;
+				tdx_hw_tag.prodid = APALIS_IMX8DXP;
 		}
 	} else if (!strcmp("tegra20", soc)) {
 		if (it == 'y' || it == 'Y')
