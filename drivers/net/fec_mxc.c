@@ -1269,6 +1269,7 @@ static void fec_gpio_reset(struct fec_priv *priv)
 		dm_gpio_set_value(&priv->phy_reset_gpio, 1);
 		mdelay(priv->reset_delay);
 		dm_gpio_set_value(&priv->phy_reset_gpio, 0);
+		mdelay(priv->post_reset_delay);
 	}
 }
 #endif
@@ -1382,6 +1383,14 @@ static int fecmxc_ofdata_to_platdata(struct udevice *dev)
 		printf("FEC MXC: phy reset duration should be <= 1000ms\n");
 		/* property value wrong, use default value */
 		priv->reset_delay = 1;
+	}
+
+	priv->post_reset_delay = dev_read_u32_default(dev,
+					"phy-reset-post-delay", 0);
+	if (priv->post_reset_delay > 1000) {
+		printf("FEC MXC: phy reset post delay should be <= 1000ms\n");
+		/* property value wrong, use default value */
+		priv->post_reset_delay = 0;
 	}
 #endif
 
