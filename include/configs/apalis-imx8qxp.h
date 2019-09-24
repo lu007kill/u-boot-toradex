@@ -18,9 +18,9 @@
 
 #define CONFIG_FSL_ESDHC
 #define CONFIG_FSL_USDHC
-#define CONFIG_SYS_FSL_ESDHC_ADDR       0
-#define USDHC1_BASE_ADDR                0x5B010000
-#define USDHC2_BASE_ADDR                0x5B020000
+#define CONFIG_SYS_FSL_ESDHC_ADDR	0
+#define USDHC1_BASE_ADDR		0x5B010000
+#define USDHC2_BASE_ADDR		0x5B020000
 #define CONFIG_SUPPORT_EMMC_BOOT	/* eMMC specific */
 
 #define CONFIG_ENV_OVERWRITE
@@ -71,17 +71,17 @@
 /* Enable Distro Boot */
 #ifndef CONFIG_SPL_BUILD
 #define BOOT_TARGET_DEVICES(func) \
-        func(MMC, mmc, 1) \
-        func(MMC, mmc, 0) \
-        func(USB, usb, 0) \
-        func(DHCP, dhcp, na)
+	func(MMC, mmc, 1) \
+	func(MMC, mmc, 0) \
+	func(USB, usb, 0) \
+	func(DHCP, dhcp, na)
 #include <config_distro_bootcmd.h>
 #undef CONFIG_ISO_PARTITION
 #else
 #define BOOTENV
 #endif
 
-#define FDT_FILE			"fsl-imx8qxp-apalis-eval-v3.dtb"
+#define FDT_FILE			"fsl-imx8qxp-apalis-eval.dtb"
 
 /* Initial environment variables */
 #define CONFIG_EXTRA_ENV_SETTINGS \
@@ -93,7 +93,7 @@
 	"script=boot.scr\0" \
 	"image=Image\0" \
 	"panel=NULL\0" \
-	"console=ttyLP1,115200 earlycon=lpuart32,0x5a040000,115200\0" \
+	"console=ttyLP1,115200\0" \
 	"fdt_addr=0x83000000\0"	\
 	"boot_fdt=try\0" \
 	"fdt_file=" FDT_FILE "\0" \
@@ -129,7 +129,7 @@
 #define CONFIG_SYS_MMC_IMG_LOAD_PART	1
 
 /* On Apalis iMX8X USDHC1 is eMMC and USDHC2 is 4-bit SD */
-#define CONFIG_MMCROOT			"/dev/mmcblk0p2"  /* USDHC1 eMMC */
+#define CONFIG_MMCROOT			"/dev/mmcblk0p2" /* USDHC1 eMMC */
 #define CONFIG_SYS_FSL_USDHC_NUM	2
 
 #define CONFIG_SYS_BOOTM_LEN		(64 << 20) /* Increase max gunzip size */
