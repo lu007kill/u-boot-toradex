@@ -3,4 +3,4 @@
 # Copyright 2018-2019 Toradex
 #
 
-obj-y += apalis-imx8qxp.o
+obj-y += apalis-imx8x.o

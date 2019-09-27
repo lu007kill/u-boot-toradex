@@ -21,8 +21,8 @@
 #include "fsl-imx8qxp.dtsi"
 
 / {
-	model = "Toradex Apalis iMX8QXP";
-	compatible = "toradex,apalis-imx8qxp", "fsl,imx8qxp";
+	model = "Toradex Apalis iMX8X";
+	compatible = "toradex,apalis-imx8x", "fsl,imx8qxp";
 
 	chosen {
 		bootargs = "console=ttyLP1,115200 earlycon=lpuart32,0x5a070000,115200";
@@ -50,7 +50,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog0>, <&pinctrl_hog1>, <&pinctrl_reset_moci>;
 
-	apalis-imx8qxp {
+	apalis-imx8x {
 		/* Apalis UART1 */
 		pinctrl_lpuart1: lpuart1grp {
 			fsl,pins = <
