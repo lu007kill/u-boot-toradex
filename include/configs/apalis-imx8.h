@@ -127,7 +127,7 @@
 	"mmcargs=setenv bootargs console=${console},${baudrate} root=${mmcroot} " \
 	"video=imxdpufb5:off video=imxdpufb6:off video=imxdpufb7:off\0" \
 	"setup=run loadhdp; hdp load ${hdp_addr}; run mmcargs\0" \
-	"tdxargs=pci=nomsi"
+	"defargs=pci=nomsi"
 
 /* Link Definitions */
 #define CONFIG_LOADADDR			0x80280000
