@@ -98,7 +98,7 @@
 #define BOOTENV
 #endif
 
-#define FDT_FILE			"fsl-imx8qm-apalis.dtb"
+#define FDT_FILE			"fsl-imx8qm-apalis-eval.dtb"
 
 /* Initial environment variables */
 #define CONFIG_EXTRA_ENV_SETTINGS \
