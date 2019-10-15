@@ -81,6 +81,8 @@
 #define BOOTENV
 #endif
 
+#define CONFIG_SKIP_RESOURCE_CHECING
+
 #define FDT_FILE			"fsl-imx8qxp-apalis-eval.dtb"
 
 /* Initial environment variables */

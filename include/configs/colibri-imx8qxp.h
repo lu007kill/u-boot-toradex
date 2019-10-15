@@ -18,9 +18,9 @@
 
 #define CONFIG_FSL_ESDHC
 #define CONFIG_FSL_USDHC
-#define CONFIG_SYS_FSL_ESDHC_ADDR       0
-#define USDHC1_BASE_ADDR                0x5B010000
-#define USDHC2_BASE_ADDR                0x5B020000
+#define CONFIG_SYS_FSL_ESDHC_ADDR	0
+#define USDHC1_BASE_ADDR		0x5B010000
+#define USDHC2_BASE_ADDR		0x5B020000
 #define CONFIG_SUPPORT_EMMC_BOOT	/* eMMC specific */
 
 #define CONFIG_ENV_OVERWRITE
@@ -37,7 +37,7 @@
 #define CONFIG_FEC_MXC_PHYADDR		2
 #define CONFIG_ETHPRIME			"eth0"
 
-#define CONFIG_FEC_XCV_TYPE             RMII
+#define CONFIG_FEC_XCV_TYPE		RMII
 #define FEC_QUIRK_ENET_MAC
 
 #define CONFIG_IP_DEFRAG
@@ -69,15 +69,17 @@
 /* Enable Distro Boot */
 #ifndef CONFIG_SPL_BUILD
 #define BOOT_TARGET_DEVICES(func) \
-        func(MMC, mmc, 1) \
-        func(MMC, mmc, 0) \
-        func(USB, usb, 0) \
-        func(DHCP, dhcp, na)
+	func(MMC, mmc, 1) \
+	func(MMC, mmc, 0) \
+	func(USB, usb, 0) \
+	func(DHCP, dhcp, na)
 #include <config_distro_bootcmd.h>
 #undef CONFIG_ISO_PARTITION
 #else
 #define BOOTENV
 #endif
+
+#define CONFIG_SKIP_RESOURCE_CHECING
 
 #define FDT_FILE			"fsl-imx8qxp-colibri-eval-v3.dtb"
 
@@ -110,7 +112,7 @@
 /* Link Definitions */
 #define CONFIG_LOADADDR			0x80280000
 
-#define CONFIG_SYS_LOAD_ADDR           CONFIG_LOADADDR
+#define CONFIG_SYS_LOAD_ADDR		CONFIG_LOADADDR
 
 #define CONFIG_SYS_INIT_SP_ADDR		0x80200000
 
@@ -127,7 +129,7 @@
 #define CONFIG_SYS_MMC_IMG_LOAD_PART	1
 
 /* On Colibri iMX8X USDHC1 is eMMC and USDHC2 is 4-bit SD */
-#define CONFIG_MMCROOT			"/dev/mmcblk0p2"  /* USDHC1 eMMC */
+#define CONFIG_MMCROOT			"/dev/mmcblk0p2" /* USDHC1 eMMC */
 #define CONFIG_SYS_FSL_USDHC_NUM	2
 
 #define CONFIG_SYS_BOOTM_LEN		(64 << 20) /* Increase max gunzip size */

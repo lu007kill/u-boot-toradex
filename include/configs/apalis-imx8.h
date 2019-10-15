@@ -87,16 +87,18 @@
 /* Enable Distro Boot */
 #ifndef CONFIG_SPL_BUILD
 #define BOOT_TARGET_DEVICES(func) \
-        func(MMC, mmc, 1) \
-        func(MMC, mmc, 2) \
-        func(MMC, mmc, 0) \
-        func(USB, usb, 0) \
-        func(DHCP, dhcp, na)
+	func(MMC, mmc, 1) \
+	func(MMC, mmc, 2) \
+	func(MMC, mmc, 0) \
+	func(USB, usb, 0) \
+	func(DHCP, dhcp, na)
 #include <config_distro_bootcmd.h>
 #undef CONFIG_ISO_PARTITION
 #else
 #define BOOTENV
 #endif
+
+#define CONFIG_SKIP_RESOURCE_CHECING
 
 #define FDT_FILE			"fsl-imx8qm-apalis-eval.dtb"
 
@@ -150,7 +152,7 @@
 #define CONFIG_SYS_MMC_IMG_LOAD_PART	1
 
 /* On Apalis iMX8 USDHC1 is eMMC, USDHC2 is 8-bit SD and USDHC3 is 4-bit SD */
-#define CONFIG_MMCROOT			"/dev/mmcblk0p2"  /* USDHC1 eMMC */
+#define CONFIG_MMCROOT			"/dev/mmcblk0p2" /* USDHC1 eMMC */
 #define CONFIG_SYS_FSL_USDHC_NUM	3
 
 #define CONFIG_SYS_BOOTM_LEN		(64 << 20) /* Increase max gunzip size */
